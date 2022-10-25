@@ -12,7 +12,7 @@ function Update()
 end
 
 function NextDay(daysToSkip)
-    today = tonumber(os.date('%w')) + 1
+    today = tonumber(os.date('%w'))
     days = {'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'}
-    return days[((today + daysToSkip) % 7)]
+    return days[((today + daysToSkip) % 7) + 1]
 end
