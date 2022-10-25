@@ -6,6 +6,9 @@ function Update()
     else
         SKIN:Bang('!SetVariable', 'NightDay', 'day')
     end
+
+    SKIN:Bang('!SetVariable', 'HourSlot', (hourOfDay))
+
 end
 
 function NextDay(daysToSkip)
