@@ -1,4 +1,6 @@
 function StatusChange()
+    --Script is unusued proof of concept
+    
     status = SKIN:GetVariable('PiholeStatus')
     ip = SKIN:GetVariable('PiholeIP')
     APIkey = SKIN:GetVariable('APIkey')

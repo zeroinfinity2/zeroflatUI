@@ -6,4 +6,4 @@ IPAddress=""
 
 ;fahrenheit or celsius
 TempScale=fahrenheit
-TempSymbol=F
+TempSymbol=˚F
