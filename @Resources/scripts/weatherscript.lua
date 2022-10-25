@@ -7,3 +7,9 @@ function Update()
         SKIN:Bang('!SetVariable', 'NightDay', 'day')
     end
 end
+
+function NextDay(daysToSkip)
+    today = tonumber(os.date('%w')) + 1
+    days = {'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'}
+    return days[((today + daysToSkip) % 7)]
+end
