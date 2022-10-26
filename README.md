@@ -15,5 +15,5 @@ First release of skin suite. Includes:
 <li>Integrated searchbar with shortcuts</li>
 <li>Overall system uptime monitoring</li>
 <li>Automatic weather forecasting features</li>
-
-This is a pre-release, these skins are still under heavy development.
+<br />
+This is alpha release, these skins are still under heavy development.
