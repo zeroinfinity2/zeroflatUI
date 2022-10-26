@@ -16,4 +16,4 @@ Includes:
 <li>Overall system uptime monitoring</li>
 <li>Automatic weather forecasting features</li>
 <br />
-This is a pre-release, these skins are still under heavy development.
+This is a alpha release, these skins are still under heavy development.
