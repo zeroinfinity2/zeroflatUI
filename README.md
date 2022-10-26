@@ -1,4 +1,4 @@
-# Zero Flat UI
+# Zero FlatUI
 Custom skins for Rainmeter, in flat minimalist style. 
 PC stats at a glance. 
 
