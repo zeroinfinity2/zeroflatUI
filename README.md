@@ -2,7 +2,7 @@
 Custom skins for Rainmeter, in flat minimalist style. 
 PC stats at a glance. 
 
-First release of skin suite. Includes:
+Includes:
 
 <li>Audio monitoring</li>
 <li>CPU graph, date/time</li>
@@ -16,4 +16,6 @@ First release of skin suite. Includes:
 <li>Overall system uptime monitoring</li>
 <li>Automatic weather forecasting features</li>
 <br />
-This is alpha release, these skins are still under heavy development.
+
+This is a alpha release, these skins are still under heavy development. Read the WIKI for setup information.
+
