@@ -7,7 +7,7 @@ function Update()
         SKIN:Bang('!SetVariable', 'NightDay', 'day')
     end
 
-    SKIN:Bang('!SetVariable', 'HourSlot', (hourOfDay))
+    SKIN:Bang('!SetVariable', 'HourSlot', (hourOfDay + 1))
 
 end
 
