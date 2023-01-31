@@ -17,6 +17,7 @@ class Weather:
 		self.current_epoch = int(round(time.time()))
 		self.currenthour = int(datetime.datetime.now().strftime("%H"))
 		self.weekday = int(datetime.datetime.now().strftime("%w"))
+		self.rmcommand = 'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList'
 		self.debug_message(14)
 		match config["preferred_scale"]:
 			case "imperial": 
@@ -155,25 +156,24 @@ class Weather:
 		return
 
 	def rainmeter_controller(self):
-		if self.rainmeter_ctrl:
-			
+		if self.rainmeter_ctrl:			
 
 			self.debug_message(12)
 			try:
 				# Update Location Variables
-				subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","country","`"{self.location["country"]}`"","zeroflatUI\weather"'])
-				subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","state","`"{self.location["state"]}`"","zeroflatUI\weather"'])
-				subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","city","`"{self.location["city"]}`"","zeroflatUI\weather"'])
+				subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","country","`"{self.location["country"]}`"","zeroflatUI\weather"'])
+				subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","state","`"{self.location["state"]}`"","zeroflatUI\weather"'])
+				subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","city","`"{self.location["city"]}`"","zeroflatUI\weather"'])
 				
 				# Update Scale variables
-				subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","temp_symbol","`"{self.scale["Symbol"]}`"","zeroflatUI\weather"'])
-				subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","ws_unit","`"{self.scale["Wind"]}`"","zeroflatUI\weather"'])
-				subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","precip_unit","`"{self.scale["Precip"]}`"","zeroflatUI\weather"'])
-				subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","dist_unit","`"{self.scale["Dist"]}`"","zeroflatUI\weather"'])
+				subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","temp_symbol","`"{self.scale["Symbol"]}`"","zeroflatUI\weather"'])
+				subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","ws_unit","`"{self.scale["Wind"]}`"","zeroflatUI\weather"'])
+				subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","precip_unit","`"{self.scale["Precip"]}`"","zeroflatUI\weather"'])
+				subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","dist_unit","`"{self.scale["Dist"]}`"","zeroflatUI\weather"'])
 
 				# Update Current weather variables
 				for key in self.current:
-					subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","current_{key}","{self.current[f"{key}"]}","zeroflatUI\weather"'])
+					subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","current_{key}","{self.current[f"{key}"]}","zeroflatUI\weather"'])
 				
 				# Update the time of day
 				if 18 > self.currenthour >= 6:
@@ -181,22 +181,22 @@ class Weather:
 				else:
 					nightday = "night"
 
-				subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","nightday","{nightday}","zeroflatUI\weather"'])			
+				subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","nightday","{nightday}","zeroflatUI\weather"'])			
 
 				# Update Forecast Variables
 				for daily in self.weekly:
-					subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","day{daily["day"]}_maxtemp","{daily[f"maxtemp"]}","zeroflatUI\weather"'])
-					subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","day{daily["day"]}_mintemp","{daily[f"mintemp"]}","zeroflatUI\weather"'])
-					subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","day{daily["day"]}_weathercode","{daily[f"weathercode"]}","zeroflatUI\weather"'])
-					subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","day{daily["day"]}_precip","{daily[f"precipitation"]}","zeroflatUI\weather"'])
-					subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!SetVariable","day{daily["day"]}_weekday","{daily[f"weekday"]}","zeroflatUI\weather"'])
+					subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_maxtemp","{daily[f"maxtemp"]}","zeroflatUI\weather"'])
+					subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_mintemp","{daily[f"mintemp"]}","zeroflatUI\weather"'])
+					subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_weathercode","{daily[f"weathercode"]}","zeroflatUI\weather"'])
+					subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_precip","{daily[f"precipitation"]}","zeroflatUI\weather"'])
+					subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_weekday","{daily[f"weekday"]}","zeroflatUI\weather"'])
 					
 
 				# Redraw Rainmeter and enable
-				subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!EnableMeasureGroup", "WeatherGroup","zeroflatUI\weather"'])
-				subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!UpdateMeasureGroup", "WeatherGroup","zeroflatUI\weather"'])
-				subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!UpdateMeter", "*","zeroflatUI\weather"'])
-				subprocess.run([r'powershell.exe', f'Start-Process -FilePath "C:\Program Files\Rainmeter\Rainmeter.exe" -ArgumentList "!Redraw","zeroflatUI\weather"'])
+				subprocess.run([r'powershell.exe', f'{self.rmcommand} "!EnableMeasureGroup", "WeatherGroup","zeroflatUI\weather"'])
+				subprocess.run([r'powershell.exe', f'{self.rmcommand} "!UpdateMeasureGroup", "WeatherGroup","zeroflatUI\weather"'])
+				subprocess.run([r'powershell.exe', f'{self.rmcommand} "!UpdateMeter", "*","zeroflatUI\weather"'])
+				subprocess.run([r'powershell.exe', f'{self.rmcommand} "!Redraw","zeroflatUI\weather"'])
 
 				self.debug_message(13)
 
