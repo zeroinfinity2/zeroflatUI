@@ -1,2 +1,5 @@
 @Resources/includes/piholeconfig.inc
 .vscode
+@Resources/scripts/pyweather/weather_cache.json
+@Resources/scripts/pyweather/weatherforecast.csv
+@Resources/scripts/pyweather/weathercurrent.csv
