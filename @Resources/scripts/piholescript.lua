@@ -29,11 +29,10 @@ end
 function StatusChange(status)
     if status == 'enabled' then
         SKIN:Bang("!Log Disabling_PiHole!")
-        SKIN:Bang('!ActivateConfig', 'quancustom\\piholestats', 'piholeOFF.ini')
-    end
-
-   if status == 'disabled' then
+        SKIN:Bang('!ActivateConfig', 'zeroflatUI\\piholestats', 'piholeOFF.ini')
+    
+    elseif status == 'disabled' then
         SKIN:Bang("!Log Enabling_PiHole!")
-        SKIN:Bang('!ActivateConfig', 'quancustom\\piholestats', 'piholeON.ini')
+        SKIN:Bang('!ActivateConfig', 'zeroflatUI\\piholestats', 'piholeON.ini')
     end
 end
