@@ -1,1 +1,4 @@
-*.ini text working-tree-encoding=UTF-16LE-BOM eol=CRLF
+cpugraph.ini text working-tree-encoding=UTF-16LE-BOM eol=CRLF
+gpugraph.ini text working-tree-encoding=UTF-16LE-BOM eol=CRLF
+ramstats.ini text working-tree-encoding=UTF-16LE-BOM eol=CRLF
+ssdgraph.ini text working-tree-encoding=UTF-16LE-BOM eol=CRLF
