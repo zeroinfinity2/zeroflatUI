@@ -11,9 +11,9 @@ class Weather:
 	def __init__(self, config):
 		self.update_time = int(config["update_time"])
 		self.ipaddress = str(config["ipaddress"])
-		self.export_csv = bool(config["export_csv"])
-		self.rainmeter_ctrl = bool(config["rainmeter_ctrl"])
-		self.debug = bool(config["debug_mode"])
+		self.export_csv = config["export_csv"]
+		self.rainmeter_ctrl = config["rainmeter_ctrl"]
+		self.debug = config["debug_mode"]
 		self.current_epoch = int(round(time.time()))
 		self.currenthour = int(datetime.datetime.now().strftime("%H"))
 		self.weekday = int(datetime.datetime.now().strftime("%w"))
@@ -103,24 +103,23 @@ class Weather:
 	def parse_weekly_forecast(self):
 		self.weekly = []
 		weekdays = ("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
-		count = 0
-		for day in enumerate(self.weather_data["daily"]["time"]):
+		for count, day in enumerate(self.weather_data["daily"]["time"]):
 			self.weekly.append(
 				{
-					"day": day[0] + 1,
-					"maxtemp": self.weather_data["daily"]["temperature_2m_max"][day[0]],
-					"mintemp": self.weather_data["daily"]["temperature_2m_min"][day[0]],
-					"weathercode": self.weather_data["daily"]["weathercode"][day[0]],
-					"precipitation": self.weather_data["daily"]["precipitation_sum"][day[0]],
+					"day": count + 1,
+					"maxtemp": self.weather_data["daily"]["temperature_2m_max"][count],
+					"mintemp": self.weather_data["daily"]["temperature_2m_min"][count],
+					"weathercode": self.weather_data["daily"]["weathercode"][count],
+					"precipitation": self.weather_data["daily"]["precipitation_sum"][count],
 					"weekday": weekdays[((self.weekday + count) % 7)]
 				}
 			)
-			count += 1
+		
 		self.debug_message(9)
 		return self.weekly
 
 	def export(self):
-		if self.export_csv:
+		if self.export_csv == "True":
 			try:
 				with open(os.path.join(os.path.dirname(__file__), 'weathercurrent.csv'), "w") as file:
 					self.writer = csv.DictWriter(file, fieldnames=["temperature", "windspeed", "winddirection", "weathercode", "rel_humidity", "visibility", "feels_like", "maxtemp", "mintemp", "total_precip"])
@@ -156,8 +155,7 @@ class Weather:
 		return
 
 	def rainmeter_controller(self):
-		if self.rainmeter_ctrl:			
-
+		if self.rainmeter_ctrl == "True":			
 			self.debug_message(12)
 			try:
 				# Update Location Variables
@@ -202,10 +200,6 @@ class Weather:
 
 			except:
 				self.debug_message(18)
-
-			#gather relevant data
-			#update rainmeter bangs via rm_process = subprocess.run()
-			#get return code with rm_process.returncode. 0 = pass
 			
 		return
 
@@ -218,7 +212,7 @@ class Weather:
 	
 
 	def debug_message(self, index):
-		if self.debug:
+		if self.debug == "True":
 			self.debug_messages = (
 				"Successfully fetched location...", 
 				"Unable to fetch location! Check your internet connection...", 
