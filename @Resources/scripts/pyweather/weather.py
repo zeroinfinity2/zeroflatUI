@@ -223,54 +223,54 @@ class Weather:
             __steps = 18
             try:
                 # Update Location Variables
-                subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","country","`"{self.location["country"]}`"","zeroflatUI\\weather"'])
+                subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","country","`"{self.location["country"]}`"","zeroflatUI\\weather"'])
                 self.pbar.update((1 / __steps) * 100)
-                subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","state","`"{self.location["state"]}`"","zeroflatUI\\weather"'])
+                subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","state","`"{self.location["state"]}`"","zeroflatUI\\weather"'])
                 self.pbar.update((2 / __steps) * 100)
-                subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","city","`"{self.location["city"]}`"","zeroflatUI\\weather"'])
+                subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","city","`"{self.location["city"]}`"","zeroflatUI\\weather"'])
                 self.pbar.update((3 / __steps) * 100)
 
                 # Update Scale variables
-                subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","temp_symbol","`"{self.scale["Symbol"]}`"","zeroflatUI\\weather"'])
+                subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","temp_symbol","`"{self.scale["Symbol"]}`"","zeroflatUI\\weather"'])
                 self.pbar.update((4 / __steps) * 100)
-                subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","ws_unit","`"{self.scale["Wind"]}`"","zeroflatUI\\weather"'])
+                subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","ws_unit","`"{self.scale["Wind"]}`"","zeroflatUI\\weather"'])
                 self.pbar.update((5 / __steps) * 100)
-                subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","precip_unit","`"{self.scale["Precip"]}`"","zeroflatUI\\weather"'])
+                subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","precip_unit","`"{self.scale["Precip"]}`"","zeroflatUI\\weather"'])
                 self.pbar.update((6 / __steps) * 100)
-                subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","dist_unit","`"{self.scale["Dist"]}`"","zeroflatUI\\weather"'])
+                subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","dist_unit","`"{self.scale["Dist"]}`"","zeroflatUI\\weather"'])
                 self.pbar.update((7 / __steps) * 100)
 
                 # Update Current weather variables
                 for key in self.current:
-                    subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","current_{key}","{self.current[f"{key}"]}","zeroflatUI\\weather"'])
+                    subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","current_{key}","{self.current[f"{key}"]}","zeroflatUI\\weather"'])
                 self.pbar.update((8 / __steps) * 100)
 
                 # Update the time of day
                 nightday = 'day' if 18 > self.current_hour >= 6 else 'night'
-                subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","nightday","{nightday}","zeroflatUI\\weather"'])
+                subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","nightday","{nightday}","zeroflatUI\\weather"'])
                 self.pbar.update((9 / __steps) * 100)
 
                 # Update Forecast Variables
                 for daily in self.weekly:
-                    subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_maxtemp","{daily[f"maxtemp"]}","zeroflatUI\\weather"'])
+                    subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_maxtemp","{daily[f"maxtemp"]}","zeroflatUI\\weather"'])
                     self.pbar.update((10 / __steps) * 100)
-                    subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_mintemp","{daily[f"mintemp"]}","zeroflatUI\\weather"'])
+                    subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_mintemp","{daily[f"mintemp"]}","zeroflatUI\\weather"'])
                     self.pbar.update((11 / __steps) * 100)
-                    subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_weathercode","{daily[f"weathercode"]}","zeroflatUI\\weather"'])
+                    subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_weathercode","{daily[f"weathercode"]}","zeroflatUI\\weather"'])
                     self.pbar.update((12 / __steps) * 100)
-                    subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_precip","{daily[f"precipitation"]}","zeroflatUI\\weather"'])
+                    subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_precip","{daily[f"precipitation"]}","zeroflatUI\\weather"'])
                     self.pbar.update((13 / __steps) * 100)
-                    subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_weekday","{daily[f"weekday"]}","zeroflatUI\\weather"'])
+                    subprocess.run(['powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_weekday","{daily[f"weekday"]}","zeroflatUI\\weather"'])
                     self.pbar.update((14 / __steps) * 100)
 
                 # Redraw Rainmeter and enable
-                subprocess.run([r'powershell.exe', f'{self.rmcommand} "!EnableMeasureGroup", "WeatherGroup","zeroflatUI\\weather"'])
+                subprocess.run(['powershell.exe', f'{self.rmcommand} "!EnableMeasureGroup", "WeatherGroup","zeroflatUI\\weather"'])
                 self.pbar.update((15 / 18) * 100)
-                subprocess.run([r'powershell.exe', f'{self.rmcommand} "!UpdateMeasureGroup", "WeatherGroup","zeroflatUI\\weather"'])
+                subprocess.run(['powershell.exe', f'{self.rmcommand} "!UpdateMeasureGroup", "WeatherGroup","zeroflatUI\\weather"'])
                 self.pbar.update((16 / 18) * 100)
-                subprocess.run([r'powershell.exe', f'{self.rmcommand} "!UpdateMeter", "*","zeroflatUI\\weather"'])
+                subprocess.run(['powershell.exe', f'{self.rmcommand} "!UpdateMeter", "*","zeroflatUI\\weather"'])
                 self.pbar.update((17 / 18) * 100)
-                subprocess.run([r'powershell.exe', f'{self.rmcommand} "!Redraw","zeroflatUI\\weather"'])
+                subprocess.run(['powershell.exe', f'{self.rmcommand} "!Redraw","zeroflatUI\\weather"'])
                 self.pbar.update((18 / 18) * 100)
                 self.pbar.finish()
                 self.debug_message(13)
