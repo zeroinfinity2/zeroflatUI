@@ -13,6 +13,7 @@ import subprocess
 import configparser
 import os
 import requests
+from progressbar import ProgressBar
 
 
 class Weather:
@@ -25,7 +26,6 @@ class Weather:
         self.ipaddress = str(config['ipaddress'])
         self.export_csv = config['export_csv']
         self.rainmeter_ctrl = config['rainmeter_ctrl']
-        self.debug = config['debug_mode']
         self.current_epoch = int(round(time.time()))
         self.current_hour = int(datetime.datetime.now().strftime('%H'))
         self.weekday = int(datetime.datetime.now().strftime('%w'))
@@ -36,9 +36,10 @@ class Weather:
         self.weather_request = None
         self.current = {}
         self.weekly = []
+        self.pbar = ProgressBar().start()
         self.debug_message(14)
 
-        # Determin the measurement scale
+        # Determine the measurement scale
         match config['preferred_scale']:
             case 'imperial':
                 self.scale = {
@@ -80,7 +81,6 @@ class Weather:
 
         except requests.exceptions.RequestException:
             self.debug_message(1)
-            return
 
     def fetch_weatherdata(self):
         """
@@ -118,7 +118,7 @@ class Weather:
             with open(os.path.join(os.path.dirname(__file__), 'weather_cache.json'), 'w+') as file:
                 json.dump(self.weather_request, file, indent=6)
                 self.debug_message(7)
-                file.seek(0)
+                file.seek(0)  # Returns to the start of the file.
                 self.weather_data = json.load(file)
                 self.debug_message(2)
         return self.weather_data
@@ -220,43 +220,59 @@ class Weather:
         '''
         if self.rainmeter_ctrl == 'True':
             self.debug_message(12)
+            __steps = 18
             try:
                 # Update Location Variables
                 subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","country","`"{self.location["country"]}`"","zeroflatUI\\weather"'])
+                self.pbar.update((1 / __steps) * 100)
                 subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","state","`"{self.location["state"]}`"","zeroflatUI\\weather"'])
+                self.pbar.update((2 / __steps) * 100)
                 subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","city","`"{self.location["city"]}`"","zeroflatUI\\weather"'])
+                self.pbar.update((3 / __steps) * 100)
 
                 # Update Scale variables
                 subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","temp_symbol","`"{self.scale["Symbol"]}`"","zeroflatUI\\weather"'])
+                self.pbar.update((4 / __steps) * 100)
                 subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","ws_unit","`"{self.scale["Wind"]}`"","zeroflatUI\\weather"'])
+                self.pbar.update((5 / __steps) * 100)
                 subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","precip_unit","`"{self.scale["Precip"]}`"","zeroflatUI\\weather"'])
+                self.pbar.update((6 / __steps) * 100)
                 subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","dist_unit","`"{self.scale["Dist"]}`"","zeroflatUI\\weather"'])
+                self.pbar.update((7 / __steps) * 100)
 
                 # Update Current weather variables
                 for key in self.current:
                     subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","current_{key}","{self.current[f"{key}"]}","zeroflatUI\\weather"'])
+                self.pbar.update((8 / __steps) * 100)
 
                 # Update the time of day
-                if 18 > self.current_hour >= 6:
-                    nightday = "day"
-                else:
-                    nightday = "night"
-
+                nightday = 'day' if 18 > self.current_hour >= 6 else 'night'
                 subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","nightday","{nightday}","zeroflatUI\\weather"'])
+                self.pbar.update((9 / __steps) * 100)
 
                 # Update Forecast Variables
                 for daily in self.weekly:
                     subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_maxtemp","{daily[f"maxtemp"]}","zeroflatUI\\weather"'])
+                    self.pbar.update((10 / __steps) * 100)
                     subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_mintemp","{daily[f"mintemp"]}","zeroflatUI\\weather"'])
+                    self.pbar.update((11 / __steps) * 100)
                     subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_weathercode","{daily[f"weathercode"]}","zeroflatUI\\weather"'])
+                    self.pbar.update((12 / __steps) * 100)
                     subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_precip","{daily[f"precipitation"]}","zeroflatUI\\weather"'])
+                    self.pbar.update((13 / __steps) * 100)
                     subprocess.run([r'powershell.exe', f'{self.rmcommand} "!SetVariable","day{daily["day"]}_weekday","{daily[f"weekday"]}","zeroflatUI\\weather"'])
+                    self.pbar.update((14 / __steps) * 100)
 
                 # Redraw Rainmeter and enable
                 subprocess.run([r'powershell.exe', f'{self.rmcommand} "!EnableMeasureGroup", "WeatherGroup","zeroflatUI\\weather"'])
+                self.pbar.update((15 / 18) * 100)
                 subprocess.run([r'powershell.exe', f'{self.rmcommand} "!UpdateMeasureGroup", "WeatherGroup","zeroflatUI\\weather"'])
+                self.pbar.update((16 / 18) * 100)
                 subprocess.run([r'powershell.exe', f'{self.rmcommand} "!UpdateMeter", "*","zeroflatUI\\weather"'])
+                self.pbar.update((17 / 18) * 100)
                 subprocess.run([r'powershell.exe', f'{self.rmcommand} "!Redraw","zeroflatUI\\weather"'])
+                self.pbar.update((18 / 18) * 100)
+                self.pbar.finish()
                 self.debug_message(13)
             except Exception as e:
                 self.debug_message(18)
@@ -274,28 +290,27 @@ class Weather:
         '''
         An index of the debug messages. Returns the message to the console if set to true.
         '''
-        if self.debug == "True":
-            self.debug_messages = (
-                'Successfully fetched location...',
-                'Unable to fetch location! Check your internet connection...',
-                'Fetched data from local cache...',
-                'Older weather data cleared...',
-                'No local cache found!',
-                'Fetching new json data!',
-                'There was an error fetching your api request. Check if the api is working or the location is correct. Attempting to read from cache...',
-                'Success writing to cache!',
-                'Current weather successfully parsed from cache...',
-                'Weekly weather successfully parsed from cache...',
-                'Weather data sucessfully exported to CSV...',
-                'Failed to export CSV. Check your API request.',
-                'Updating Rainmeter...',
-                'Rainmeter sucessfully updated...',
-                'Alert! Debug Mode enabled... ',
-                'Measurement scale set to imperial...',
-                'Measurement scale set to metric...',
-                'Config successfully loaded...',
-                'Unable to update Rainmeter. Ensure you are using zeroflatUI, and Rainmeter is running.'
-            )
+        self.debug_messages = (
+            'Successfully fetched location...',
+            'Unable to fetch location! Check your internet connection...',
+            'Fetched data from local cache...',
+            'Older weather data cleared...',
+            'No local cache found!',
+            'Fetching new json data!',
+            'There was an error fetching your api request. Check if the api is working or the location is correct. Attempting to read from cache...',
+            'Success writing to cache!',
+            'Current weather successfully parsed from cache...',
+            'Weekly weather successfully parsed from cache...',
+            'Weather data sucessfully exported to CSV...',
+            'Failed to export CSV. Check your API request.',
+            'Updating Rainmeter...',
+            'Rainmeter sucessfully updated...',
+            'Alert! Debug Mode enabled... ',
+            'Measurement scale set to imperial...',
+            'Measurement scale set to metric...',
+            'Config successfully loaded...',
+            'Unable to update Rainmeter. Ensure you are using zeroflatUI, and Rainmeter is running.'
+        )
         return print(self.debug_messages[index])
 
 
