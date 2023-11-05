@@ -100,7 +100,7 @@ class Weather:
                 self.weather_data = None
                 self.debug_message(3)
 
-        except (FileNotFoundError, json.JSONDecodeError):
+        except (FileNotFoundError, json.JSONDecodeError, TypeError):
             self.debug_message(4)
             self.weather_data = None
 
